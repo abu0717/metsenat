@@ -19,6 +19,11 @@ class StudentSponsorSerializer(serializers.ModelSerializer):
         model = StudentSponsor
         fields = '__all__'
 
+    def validate(self, data):
+        instance = StudentSponsor(**data)
+        instance.clean()
+        return data
+
 
 class OTMSerializer(serializers.ModelSerializer):
     class Meta:
