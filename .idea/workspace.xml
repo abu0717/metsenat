@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="eb073c88-4fc4-402d-911c-e7ea656b3eeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/migrations/0002_alter_sponsor_orginization_alter_sponsor_shaxs_type.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/migrations/0003_alter_sponsor_status.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/user/urls.py" afterDir="false" />
@@ -75,7 +76,8 @@
       <workItem from="1706628757384" duration="3380000" />
       <workItem from="1706695337020" duration="333000" />
       <workItem from="1706772658692" duration="2100000" />
-      <workItem from="1706775160719" duration="11557000" />
+      <workItem from="1706775160719" duration="18832000" />
+      <workItem from="1706955241671" duration="4140000" />
     </task>
     <servers />
   </component>

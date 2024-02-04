@@ -1,5 +1,12 @@
+from django.db.models import Sum
 from rest_framework import serializers
 from .models import Sponsor, StudentModel, StudentSponsor, OTM
+
+
+class OTMSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OTM
+        fields = '__all__'
 
 
 class SponsorSerializer(serializers.ModelSerializer):
@@ -7,11 +14,37 @@ class SponsorSerializer(serializers.ModelSerializer):
         model = Sponsor
         fields = '__all__'
 
+    def validate(self, data):
+        instance = Sponsor(**data)
+        instance.clean()
+        return data
+
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentModel
         fields = '__all__'
+
+
+    def to_representation(self, instance):
+        summa = StudentSponsor.objects.filter(student=instance.id).aggregate(total_summa=Sum('summa'))[
+                    'total_summa'] or 0
+        student_homiylari = StudentSponsor.objects.filter(student=instance.id).values_list('sponsor', flat=True)
+        student_homiylari = Sponsor.objects.filter(id__in=student_homiylari).values()
+        return {
+            'id': instance.id,
+            'full_name': instance.full_name,
+            'otm': instance.otm_name.otm_name,
+            'phone_number': instance.phone_number,
+            'contract_sum': instance.contract_summa,
+            'payed_price': summa,
+            'student_homiylari': student_homiylari
+        }
+
+    def validate(self, data):
+        instance = StudentModel(**data)
+        instance.clean()
+        return data
 
 
 class StudentSponsorSerializer(serializers.ModelSerializer):
@@ -23,9 +56,3 @@ class StudentSponsorSerializer(serializers.ModelSerializer):
         instance = StudentSponsor(**data)
         instance.clean()
         return data
-
-
-class OTMSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OTM
-        fields = '__all__'
