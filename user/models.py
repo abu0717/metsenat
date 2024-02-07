@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
-
 from .validator import validate_phone_number
 
 
@@ -55,8 +54,8 @@ class StudentModel(models.Model):
         if self.contract_summa < 100:
             raise ValidationError('Contract summa cannot be less than 100')
 
-        def __str__(self):
-            return self.full_name
+    def __str__(self):
+        return self.full_name
 
 
 class StudentSponsor(models.Model):
@@ -84,5 +83,5 @@ class StudentSponsor(models.Model):
         elif self.summa < 100:
             raise ValidationError('The summa is less than 100')
 
-        def __str__(self):
-            return self.sponsor.full_name
+    def __str__(self):
+        return self.sponsor.full_name

@@ -3,7 +3,8 @@ from rest_framework import filters, pagination, mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.viewsets import ModelViewSet
-from .serializers import StudentSerializer, StudentSponsorSerializer, SponsorSerializer, OTMSerializer
+from .serializers import StudentSerializer, StudentDetailSerializer, StudentSponsorSerializer, SponsorSerializer, \
+    OTMSerializer
 from .models import StudentModel, StudentSponsor, Sponsor, OTM
 from rest_framework.permissions import IsAdminUser, BasePermission
 
@@ -15,14 +16,28 @@ class CustomPagination(pagination.PageNumberPagination):
     max_page_size = 10
 
 
-class StudentViewSet(ModelViewSet):
+# class StudentViewSet(ModelViewSet):
+#     queryset = StudentModel.objects.all()
+#     serializer_class = StudentSerializer
+#     permission_classes = [IsAdminUser]
+#     pagination_class = CustomPagination
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['education_type', 'otm_name__otm_name']
+#     http_method_names = ['get', 'patch', 'post', 'delete']
+
+class StudentView(generics.ListAPIView):
     queryset = StudentModel.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [IsAdminUser]
-    pagination_class = CustomPagination
     filter_backends = [filters.SearchFilter]
     search_fields = ['education_type', 'otm_name__otm_name']
-    http_method_names = ['get', 'patch', 'post', 'delete']
+
+
+class Student(generics.RetrieveUpdateAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
+    queryset = StudentModel.objects.all()
+    serializer_class = StudentDetailSerializer
+    permission_classes = [IsAdminUser]
+    http_method_names = ['get', 'patch', 'head', 'delete']
 
 
 class StudentSponsorViewSet(ModelViewSet):

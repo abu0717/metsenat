@@ -14,6 +14,17 @@ class SponsorSerializer(serializers.ModelSerializer):
         model = Sponsor
         fields = '__all__'
 
+    def to_representation(self, instance):
+        summa = StudentSponsor.objects.filter(sponsor=instance.id).aggregate(total=Sum('summa'))[
+            'total'] or 0
+        return {
+            'id': instance.id,
+            'full_name': instance.full_name,
+            'phone_number': instance.phone_number,
+            'organization': instance.orginization,
+            'support_price': instance.support_price,
+            'spent_price': summa
+        }
     def validate(self, data):
         instance = Sponsor(**data)
         instance.clean()
@@ -25,6 +36,23 @@ class StudentSerializer(serializers.ModelSerializer):
         model = StudentModel
         fields = '__all__'
 
+    def to_representation(self, instance):
+        summa = StudentSponsor.objects.filter(student=instance.id).aggregate(total=Sum('summa'))[
+            'total'] or 0
+        return {
+            'id': instance.id,
+            'full_name': instance.full_name,
+            'otm': instance.otm_name.otm_name,
+            'phone_number': instance.phone_number,
+            'contract_sum': instance.contract_summa,
+            'payed_price': summa,
+        }
+
+
+class StudentDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentModel
+        fields = '__all__'
 
     def to_representation(self, instance):
         summa = StudentSponsor.objects.filter(student=instance.id).aggregate(total_summa=Sum('summa'))[
