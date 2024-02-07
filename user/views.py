@@ -82,7 +82,7 @@ class CustomPermission(BasePermission):
 def all_sum(request):
     homiy_summa = StudentSponsor.objects.all().aggregate(total_summa=Sum('summa'))[
                       'total_summa'] or 0
-    std_summa = StudentSponsor.objects.filter().aggregate(total_summa=Sum('summa'))[
+    std_summa = StudentModel.objects.filter().aggregate(total_summa=Sum('contract_summa'))[
                     'total_summa'] or 0
     qolgan = std_summa - homiy_summa
     return Response({

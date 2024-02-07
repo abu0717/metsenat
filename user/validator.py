@@ -11,5 +11,7 @@ def validate_phone_number(value):
         phone_number = phonenumbers.parse(value, None)  # Assuming no region code
         if not phonenumbers.is_valid_number(phone_number):
             raise ValidationError('The Phone Number format is not correct')
+        elif not str(value).startswith('+998'):
+            raise ValidationError('The Phone Number format is not correct')
     except phonenumbers.phonenumberutil.NumberParseException:
         raise ValidationError('The Phone Number format is not correct')
