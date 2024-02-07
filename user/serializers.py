@@ -16,19 +16,46 @@ class SponsorSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         summa = StudentSponsor.objects.filter(sponsor=instance.id).aggregate(total=Sum('summa'))[
-            'total'] or 0
+                    'total'] or 0
         return {
             'id': instance.id,
             'full_name': instance.full_name,
             'phone_number': instance.phone_number,
-            'organization': instance.orginization,
             'support_price': instance.support_price,
-            'spent_price': summa
+            'spent_price': summa,
+            'date': instance.created_at,
+            'status': instance.status
         }
+
     def validate(self, data):
         instance = Sponsor(**data)
         instance.clean()
         return data
+
+
+class SponsorDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sponsor
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        if instance.orginization == '':
+            return {
+                'id': instance.id,
+                'full_name': instance.full_name,
+                'phone_number': instance.phone_number,
+                'support_price': instance.support_price,
+                'status': instance.status
+            }
+        else:
+            return {
+                'id': instance.id,
+                'full_name': instance.full_name,
+                'phone_number': instance.phone_number,
+                'support_price': instance.support_price,
+                'organization': instance.orginization,
+                'status': instance.status
+            }
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -38,14 +65,14 @@ class StudentSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         summa = StudentSponsor.objects.filter(student=instance.id).aggregate(total=Sum('summa'))[
-            'total'] or 0
+                    'total'] or 0
         return {
             'id': instance.id,
             'full_name': instance.full_name,
+            'study_type': instance.education_type,
             'otm': instance.otm_name.otm_name,
-            'phone_number': instance.phone_number,
-            'contract_sum': instance.contract_summa,
             'payed_price': summa,
+            'contract_sum': instance.contract_summa
         }
 
 
@@ -55,17 +82,24 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        summa = StudentSponsor.objects.filter(student=instance.id).aggregate(total_summa=Sum('summa'))[
-                    'total_summa'] or 0
-        student_homiylari = StudentSponsor.objects.filter(student=instance.id).values_list('sponsor', flat=True)
-        student_homiylari = Sponsor.objects.filter(id__in=student_homiylari).values()
+        student_sponsors = StudentSponsor.objects.filter(student=instance.id)
+        summa = student_sponsors.aggregate(total_summa=Sum('summa'))['total_summa'] or 0
+        student_homiylari = []
+        for sponsor in student_sponsors:
+            sponsor_info = {
+                'id': sponsor.sponsor.id,
+                'full_name': sponsor.sponsor.full_name,
+                'spent_price': sponsor.summa
+            }
+            student_homiylari.append(sponsor_info)
         return {
             'id': instance.id,
             'full_name': instance.full_name,
-            'otm': instance.otm_name.otm_name,
             'phone_number': instance.phone_number,
-            'contract_sum': instance.contract_summa,
+            'otm': instance.otm_name.otm_name,
+            'study_type': instance.education_type,
             'payed_price': summa,
+            'contract_sum': instance.contract_summa,
             'student_homiylari': student_homiylari
         }
 

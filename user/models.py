@@ -23,10 +23,10 @@ class Sponsor(models.Model):
     def clean(self):
         if self.support_price < 100:
             raise ValidationError('Support price should be more or equal to 100')
-        elif (self.shaxs_type) == True and self.orginization == 'None':
-            raise ValidationError('If you are legal you should fill organization form', code=400)
-        elif (self.shaxs_type) == False and self.orginization != 'None':
-            raise ValidationError('if you are not legal you cannot fill organization form', code=400)
+        # elif (self.shaxs_type) == True and self.orginization == 'None':
+        #     raise ValidationError('If you are legal you should fill organization form', code=400)
+        # elif (self.shaxs_type) == False and self.orginization != 'None':
+        #     raise ValidationError('if you are not legal you cannot fill organization form', code=400)
 
     def __str__(self):
         return self.full_name
