@@ -7,6 +7,7 @@
 ## And then open your terminal and start creating by env file
       python3 install -m venv .env
 ## then activate env file.
+    . [env file name]/bin/activate
 ## And after that start with installing requirements.txt
     pip install -m requirements.txt
 ## then make a migrations.
